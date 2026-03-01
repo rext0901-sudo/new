@@ -14,16 +14,8 @@
   ],
   "crons": [
     {
-      "path": "/api/cron/fetch-prices",
-      "schedule": "*/15 * * * *"
-    },
-    {
-      "path": "/api/cron/poll-device",
-      "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/cron/evaluate-rules",
-      "schedule": "0,15,30,45 * * * *"
+      "path": "/api/cron/daily",
+      "schedule": "0 13 * * *"
     }
   ]
 }
