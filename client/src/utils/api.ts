@@ -65,7 +65,7 @@ export const refreshPrices = async () => {
 // Heat pump (with demo fallback)
 export const getHeatpumpStatus = async () => {
   try {
-    return await fetchJson<{ status: DeviceStatus | null; api_reachable: boolean }>('/heatpump/status');
+    return await fetchJson<{ status: DeviceStatus | null; api_reachable: boolean }>('/heatpump?action=status');
   } catch {
     return getDemoStatus();
   }
@@ -73,7 +73,7 @@ export const getHeatpumpStatus = async () => {
 
 export const getLiveHeatpumpStatus = async () => {
   try {
-    return await fetchJson<{ status: DeviceStatus | null; api_reachable: boolean }>('/heatpump/status/live');
+    return await fetchJson<{ status: DeviceStatus | null; api_reachable: boolean }>('/heatpump?action=live');
   } catch {
     return getDemoStatus();
   }
@@ -81,7 +81,7 @@ export const getLiveHeatpumpStatus = async () => {
 
 export const setHeatpumpSetpoint = async (targetTemp: number, mode: string) => {
   try {
-    return await fetchJson<{ success: boolean }>('/heatpump/setpoint', {
+    return await fetchJson<{ success: boolean }>('/heatpump/control?type=setpoint', {
       method: 'POST',
       body: JSON.stringify({ targetTemp, mode }),
     });
@@ -92,7 +92,7 @@ export const setHeatpumpSetpoint = async (targetTemp: number, mode: string) => {
 
 export const setHeatpumpMode = async (mode: string) => {
   try {
-    return await fetchJson<{ success: boolean }>('/heatpump/mode', {
+    return await fetchJson<{ success: boolean }>('/heatpump/control?type=mode', {
       method: 'POST',
       body: JSON.stringify({ mode }),
     });
@@ -103,7 +103,7 @@ export const setHeatpumpMode = async (mode: string) => {
 
 export const getHeatpumpHistory = async (days = 7) => {
   try {
-    return await fetchJson<{ days: number; records: DeviceStatus[] }>(`/heatpump/history?days=${days}`);
+    return await fetchJson<{ days: number; records: DeviceStatus[] }>(`/heatpump?action=history&days=${days}`);
   } catch {
     const records: DeviceStatus[] = [];
     const now = Date.now();
@@ -143,7 +143,7 @@ export const getActiveRule = async () => {
 
 export const getRuleLogs = async (limit = 50) => {
   try {
-    return await fetchJson<{ logs: RuleLog[] }>(`/rules/logs?limit=${limit}`);
+    return await fetchJson<{ logs: RuleLog[] }>(`/rules/meta?action=logs&limit=${limit}`);
   } catch {
     return { logs: [] };
   }
@@ -187,7 +187,7 @@ export const deleteRule = async (id: string) => {
 
 export const reorderRules = async (orderedIds: string[]) => {
   try {
-    return await fetchJson<{ success: boolean; rules: Rule[] }>('/rules/reorder', {
+    return await fetchJson<{ success: boolean; rules: Rule[] }>('/rules/meta?action=reorder', {
       method: 'POST',
       body: JSON.stringify({ orderedIds }),
     });
@@ -199,7 +199,7 @@ export const reorderRules = async (orderedIds: string[]) => {
 // System (with demo fallback)
 export const getSystemStatus = async () => {
   try {
-    return await fetchJson<SystemStatus>('/status');
+    return await fetchJson<SystemStatus>('/config?type=status');
   } catch {
     return {
       prices_fresh: true,
@@ -212,7 +212,7 @@ export const getSystemStatus = async () => {
 
 export const getSettings = async () => {
   try {
-    return await fetchJson<Settings>('/settings');
+    return await fetchJson<Settings>('/config?type=settings');
   } catch {
     return {
       timezone: 'Europe/Amsterdam',
