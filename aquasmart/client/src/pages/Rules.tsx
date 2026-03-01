@@ -120,7 +120,7 @@ export default function Rules() {
 
   const updateCondition = (idx: number, field: string, value: unknown) => {
     const updated = [...form.conditions];
-    (updated[idx] as Record<string, unknown>)[field] = value;
+    (updated[idx] as unknown as Record<string, unknown>)[field] = value;
     setForm({ ...form, conditions: updated as RuleCondition[] });
   };
 

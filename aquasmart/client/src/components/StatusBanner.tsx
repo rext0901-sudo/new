@@ -1,8 +1,18 @@
 import { usePolling } from '../hooks/useApi';
-import { getSystemStatus } from '../utils/api';
+import { getSystemStatus, isDemoMode } from '../utils/api';
 
 export default function StatusBanner() {
   const { data } = usePolling(() => getSystemStatus(), 30000);
+
+  if (isDemoMode()) {
+    return (
+      <div className="bg-blue-100 border-b border-blue-300 px-4 py-2">
+        <p className="text-blue-800 text-sm font-medium">
+          Demo mode — Showing simulated Dutch energy prices and heat pump data. Connect ENTSO-E API and Vercel Postgres for live data.
+        </p>
+      </div>
+    );
+  }
 
   if (!data) return null;
 
